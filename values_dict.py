@@ -1,10 +1,6 @@
 #
 # Read contents of the web files used by siteplayer builder and substitute replacement strings
 #
-
-from operator import itemgetter
-import re
-
 class Sp_values(dict):
     # maintain a dictionary of the current values for sp objects
     def __init__(self,sp_objects):

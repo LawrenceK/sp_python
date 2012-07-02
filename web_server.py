@@ -14,11 +14,11 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def translate_file(self, source_filename, target_filename):
         with open(source_filename) as source:
             with open(target_filename, "w") as target:
-                nline = source.read() % sp_values
+                nline = source.read() % RequestHandler.sp_values
                 target.write(nline)
 
     def translate_path(self, path):
-        path = path[1:]
+        path = path[1:].split('?',1)[0]
         targetfilename = os.path.join(os.getcwd(), "www", path)
         print os.getcwd(), targetfilename
         if targetfilename.endswith(".inc"):
@@ -29,6 +29,10 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # override so as to manage translation file single 
 #        path = super(RequestHandler,self).translate_path(path)
         return targetfilename 
+
+RequestHandler.extensions_map.update({
+        '.inc': 'text/plain',
+        })
 
 SimpleHTTPServer.test(HandlerClass = RequestHandler)
 

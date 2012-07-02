@@ -5,7 +5,7 @@ import os, os.path
 import re
 
 # the purpose is to turn siteplyare markup into python string substitution
-re1 = re.compile( "\^(\w*?)[ ^]" )
+re1 = re.compile( "\^(\w+\^?)" )
 def rewrite_ref(matchobj):
     return "%(" + matchobj.group(0).replace("^","") + ")s"
 
