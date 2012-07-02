@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<WebbrickStatus Ver="^SwVerMajor.^SwVerMinor.^SwVerBuild">
+	<SN>^NodeNumber</SN>
+	<Error>^CmdError</Error>
+	<Context>^SPToD</Context>
+	<LoginState>^LoginState</LoginState>
+	
+	<DI>^DigIn</DI>
+	<DO>^SPDigOutStatus</DO>
+	<Clock>
+		<Date>^SPyear^/^SPmonth^/^SPdate</Date> 
+		<Time>^SPhour^:^SPminute^:^SPsecond</Time>
+		<Day>^SPday</Day>
+	</Clock>
+	
+	<OWBus>^OneWSts</OWBus>
+	<Tmps>
+		<Tmp id="1" lo="^SPTemp0Low" hi="^SPTemp0Hi">^SPTemp0</Tmp>
+		<Tmp id="2" lo="^SPTemp1Low" hi="^SPTemp1Hi">^SPTemp1</Tmp>
+		<Tmp id="3" lo="^SPTemp2Low" hi="^SPTemp2Hi">^SPTemp2</Tmp>
+		<Tmp id="4" lo="^SPTemp3Low" hi="^SPTemp3Hi">^SPTemp3</Tmp>
+		<Tmp id="5" lo="^SPTemp4Low" hi="^SPTemp4Hi">^SPTemp4</Tmp>
+	</Tmps>
+	
+	<AOs>
+		<AO id="0">^AnOut0Value</AO>
+		<AO id="1">^AnOut1Value</AO>
+		<AO id="2">^AnOut2Value</AO>
+		<AO id="3">^AnOut3Value</AO>
+	</AOs>
+	<AIs>
+		<AI id="0" lo="^SPAnIn0Low" hi="^SPAnIn0Hi">^AnIn0Value</AI>
+		<AI id="1" lo="^SPAnIn1Low" hi="^SPAnIn1Hi">^AnIn1Value</AI>
+		<AI id="2" lo="^SPAnIn2Low" hi="^SPAnIn2Hi">^AnIn2Value</AI>
+		<AI id="3" lo="^SPAnIn3Low" hi="^SPAnIn3Hi">^AnIn3Value</AI>
+	</AIs>
+</WebbrickStatus>

@@ -1,0 +1,146 @@
+body {
+    font-weight: normal; 
+    font-size: 1em;
+    font-family: arial, helvetica;
+    color: #DDDDDD;
+    margin: 0; 
+    padding: 0; 
+    border: 0; 
+    background-color: #888888;
+    width: 99%;
+}
+
+h2 {
+    font-weight: bolder; 
+    font-size: 1.5em; 
+    margin-top: 5;
+    margin-bottom: 0;
+    border-bottom: 2px solid #FFFFFF; 
+}
+
+table{
+    margin-bottom: 2;
+    border-spacing: 0px;
+    border: 1px solid #FFFFFF;
+    width: 99%;
+}
+
+img{
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-weight: normal; 
+    line-height: 130%; 
+}
+
+th.narrow {
+    width:5%;
+    text-align: left 
+}
+
+th {
+    width:10%;
+    font-weight: bold; 
+    font-size: 1.2em;
+    text-align: left;
+}
+
+.name {
+    color: #333333;
+    font-weight: bold;
+}
+
+td {
+    width:10%;
+    text-align: left;
+}
+td.t2{
+    width:33%; 
+    text-align: left;
+}
+table.form{
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
+    text-align: center;
+}
+
+table.col6{
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
+}
+
+td.formlabel {
+    width: 20%;
+    text-align: right;
+}
+
+td.formfield {
+    width: 20%;
+//    text-align: left;
+}
+
+label {
+    margin-right: 10px;
+}
+select {
+    margin-right: 10px;
+}
+
+.on {
+    background-color: lime; 
+    font-weight: bold; 
+    color: #333333;
+    }
+
+.off {
+    font-weight: bold; 
+    }
+
+.clear {
+    background-color: lime; 
+    font-weight: bold; 
+    color: #333333;
+    }
+
+.alarm {
+    background-color: red;
+    font-weight: bold; 
+    }
+
+.clickable
+    {
+    background-color: #AAAAAA;
+    border: 3px outset #AAAAAA;
+    color: #333333;
+    font-weight: bold; 
+    text-align: center;
+    }
+
+.menu
+    {
+    background-color: #AAAAAA;
+    border: 3px groove #AAAAAA;
+    color: #333333;
+    font-weight: bold; 
+    text-align: center;
+    }
+    
+.over 
+    {
+    background-color: #FFFF99; 
+    cursor: auto;
+    border: 3px outset #AAAAAA;
+    font-weight: bolder; 
+    color: #222222;
+    text-align: center;
+    }
+
+a {
+    text-decoration:none;
+    background-color: #AAAAAA;
+    color: #DDDDDD;
+}

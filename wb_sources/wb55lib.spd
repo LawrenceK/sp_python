@@ -1,0 +1,48 @@
+;
+; These are initial variables that you can place in your system
+;
+;$Devicename sets the name or description of the device
+$Devicename "WebBrick"
+
+;$DHCP on sets SitePlayer to find its IP address from a DHCP server
+$DHCP off
+
+;$DownloadPassword sets password for downloading web pages and firmware
+$DownloadPassword "h2m8download"
+
+;$SitePassword sets password for browsing web pages
+;$SitePassword "guff238"
+
+;$InitialIP sets SitePlayer’s IP address to use if no DHCP server is available
+; LPK we set to not be 10.100.100.100 so that on an SP reset we it.
+$InitialIP "10.100.100.251"	
+
+;$PostIRQ on sets SitePlayer to generate a low level IRQ on pin 11
+$PostIRQ off
+
+;$Sitefile sets the binary image filename that will be created
+$Sitefile ".\WebBrick.spb"
+
+;$Sitepath sets the root path of the web pages for this project
+$Sitepath ".\build"
+
+; Ensure that JavaScript files are parsed
+; LPK All variable substitution is handled in .inc files. So js files are untouched.
+$Parse inc
+
+;$Include sets the name of a file to include during make process
+$Include ".\WB55def.inc"
+$Include ".\udpsend_def.inc"
+$Include ".\SitePlayer.inc"
+
+;Export definitions for a C header file
+$ExportFormatFile ".\makec.def"
+$ExportFile ".\WB55Lib.h"
+$Export
+
+;Export definitions for a html file
+$ExportFormatFile ".\makehtml.def"
+$ExportHeaderFile ".\htmlheader.htm"
+$ExportFooterFile ".\htmlfooter.htm"
+$ExportFile ".\Wb55Lib.html"
+$Export
