@@ -7,8 +7,9 @@
 # File 1 is a C header file
 # gives us address.
 # File 2 is the siteplayer defintion files - gives us types.
-from operator import itemgetter
 import re
+import logging
+_log = logging.getlogger(__file__)
 
 class Sp_object(object):
     T_unknown = 0

@@ -3,6 +3,8 @@
 #
 import os, os.path
 import SimpleHTTPServer
+import logging
+_log = logging.getlogger(__file__)
 # import SimpleHTTPRequestHandler, test
 
 from process_sp_defs import Sp_objects
@@ -12,6 +14,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     sp_values = Sp_values(Sp_objects())
 
     def translate_file(self, source_filename, target_filename):
+        _log.debug( "translate_file %s -> %s", source_filename, target_filename)
         with open(source_filename) as source:
             with open(target_filename, "w") as target:
                 nline = source.read() % RequestHandler.sp_values
@@ -28,6 +31,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         # override so as to manage translation file single 
 #        path = super(RequestHandler,self).translate_path(path)
+        _log.debug( "translate_path %s -> %s", path, targetfilename)
         return targetfilename 
 
 RequestHandler.extensions_map.update({
