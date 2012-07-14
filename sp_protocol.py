@@ -7,7 +7,6 @@
 # Data 0 - 16 Bytes
 #
 #
-import serial
 import threading
 import logging
 _log = logging.getlogger(__file__)
@@ -47,35 +46,12 @@ class PacketTypes:
 
 class SpProtocolHandler(threading.Thread):
 	daemon = True
-	def __init__(self, callback):
+	def __init__(self, io, callback):
 		super(SpProtocolHandler,self).__init__(name='SpProtocolHandler')
-		self._portname = '/dev/ttyUSB1'
-		self._port = None
+        self._io = io
 		self._callback = callback
-		self.start()
-		self.raw_data = bytearray(3*256)	# initial state
-
-	def open(self):
-		_log.debug("open %s", self._portname)
-		self.port = serial.Serial(
-				port=self._portname,
-				baudrate=9600,
-				parity=serial.PARITY_NONE,
-				stopbits=serial.STOPBITS_ONE,
-				bytesize=serial.EIGHTBITS
-		)
-		self.port.open()
-
-	def close(self):
-		_log.debug("close %s", self._portname)
-		if self.port.isOpen():
-			self.port.close()
-
-	def write(self,data):
-		_log.debug("write %s", data)
-		if self.port.isOpen():
-			self.port.write(data)
-			self.port.write('\n')
+		self._raw_data = bytearray(3*256)	# initial state
+        self.start()
 
 	def extract_len(self,command):
 		return (command & PacketTypes.LENGTH_MASK)+1
@@ -83,7 +59,7 @@ class SpProtocolHandler(threading.Thread):
 	def update_data(self,address,data):
 		_log.debug("update_data (%s) %s", address,data)
 		# update raw_data
-		self.raw_data[address:address+len(data)] = data
+		self._raw_data[address:address+len(data)] = data
 		# call user to make other updates
 		if self._callback:
 			self._callback( address, len(data), self.raw_data)
@@ -161,7 +137,7 @@ class SpProtocolHandler(threading.Thread):
 		pass
 
 	def read_packet(self):
-		command = self.port.read(1)
+        command = io.read(1)
 		code = (command & PacketTypes.COMMAND_MASK)
 		command_name = "command_%X" % (code,)
 		# desptahc to one of command_XX handlers above
