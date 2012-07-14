@@ -6,25 +6,18 @@ import unittest
 
 from sp_protocol import SpProtocolHandler
 
-class TestWebbrickIo(unittest.TestCase):
+class TestSpProtocolHandler(unittest.TestCase):
 
     def setUp(self):
         self._updates = []
 
-    def testProtocol(self):
-        with open("data/wb_reset.log", "r") as io:
-            sp = SpProtocolHandler(io, None)
-            while sp.is_running:
-                time.sleep(0.2)
-
     def protocol_callback(self, address, length, raw_data):
         self._updates.append( (address, length, raw_data) )
-        print "%s %s %s " % (address, length, raw_data)
 
     def testProtocolCallback(self):
         with open("data/wb_reset.log", "r") as io:
             sp = SpProtocolHandler(io, self.protocol_callback)
             while sp.is_running:
                 time.sleep(0.2)
-
+        self.assertEqual(0, len(self._updates) )
 

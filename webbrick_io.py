@@ -1,6 +1,6 @@
 import serial
 import logging
-_log = logging.getlogger(__file__)
+_log = logging.getLogger(__file__)
 
 class WebbrickIo():
 	def __init__(self, portname = '/dev/ttyUSB1' ):

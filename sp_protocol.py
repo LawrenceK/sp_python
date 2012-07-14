@@ -63,7 +63,7 @@ class SpProtocolHandler(threading.Thread):
         self._raw_data[address:address+len(data)] = data
         # call user to make other updates
         if self._callback:
-            self._callback( address, len(data), self.raw_data)
+            self._callback( address, len(data), self._raw_data)
 
     def command_00(self,command):
         # NOP
@@ -99,16 +99,15 @@ class SpProtocolHandler(threading.Thread):
 
     def command_80(self,command):
         # write
-        address = self._io.read(1)	# single byte address
+        address = self.read_short_address()
         data = self._io.read( self.extract_len(command) )
         self.update_data( address, data )
 
     def command_90(self,command):
         # writeX
-        address = self._io.read(2)	# two byte address
-        long_address = address[0] + (address[1]*256)
+        address = self.read_long_address()
         data = self._io.read( self.extract_len(command) )
-        self.update_data( long_address, data )
+        self.update_data( address, data )
 
     def command_A0(self,command):
         # WriteBit
@@ -120,14 +119,13 @@ class SpProtocolHandler(threading.Thread):
 
     def command_C0(self,command):
         # Read
-        address = self._io.read(1)	# single byte address
-        self._io.write( self.raw_data[address:address+self.extract_len(command)])
+        address = self.read_short_address()
+#        self._io.write( self._raw_data[address:address+self.extract_len(command)])
 
     def command_D0(self,command):
         # ReadX
-        address = self._io.read(2)	# two byte address
-        long_address = address[0] + (address[1]*256)
-        self._io.write( self.raw_data[long_address:long_address+self.extract_len(command)])
+        address = self.read_long_address()
+#        self._io.write( self._raw_data[address:address+self.extract_len(command)])
 
     def command_E0(self,command):
         # readbit
@@ -137,14 +135,25 @@ class SpProtocolHandler(threading.Thread):
         # unsued
         pass
 
+    def read_short_address(self):
+        return ord(self._io.read(1)[0])
+
+    def read_long_address(self):
+        address = self._io.read(2)
+        return ord(address[0]) + (ord(address[1])*256)
+
     def read_packet(self):
-        command = ord(self._io.read(1)[0])
-        print "%x" % command
-        code = (command & PacketTypes.COMMAND_MASK)
-        command_name = "command_%X" % (code,)
-        # desptahc to one of command_XX handlers above
-        _log.debug("read_packet %s", command_name)
-        getattr(self, command_name)(command)
+        command = self._io.read(1)
+        if len(command) > 0:
+            command = ord(command[0])
+            code = (command & PacketTypes.COMMAND_MASK)
+            command_name = "command_%2.2X" % (code,)
+            # desptahc to one of command_XX handlers above
+            _log.debug("read_packet %s", command_name)
+            getattr(self, command_name)(command)
+        else:
+            # no more data..
+            self._running = False
 
     def shutdown(self):
         self._running = False
@@ -158,11 +167,8 @@ class SpProtocolHandler(threading.Thread):
         self._running = True
         try :
             while self._running:
-	            self.read_packet()
+                self.read_packet()
         except Exception, ex:
             _log.exception("run")
-            print "exception", ex
         self._running = False
-
-        print "not running"
 
