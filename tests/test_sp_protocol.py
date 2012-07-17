@@ -19,5 +19,5 @@ class TestSpProtocolHandler(unittest.TestCase):
             sp = SpProtocolHandler(io, self.protocol_callback)
             while sp.is_running:
                 time.sleep(0.2)
-        self.assertEqual(0, len(self._updates) )
+        self.assertNotEqual(0, len(self._updates) )
 

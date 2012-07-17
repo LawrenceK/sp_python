@@ -9,7 +9,7 @@
 # File 2 is the siteplayer defintion files - gives us types.
 import re
 import logging
-_log = logging.getlogger(__file__)
+_log = logging.getLogger(__file__)
 
 class Sp_object(object):
     T_unknown = 0
@@ -17,38 +17,24 @@ class Sp_object(object):
     T_integer = 2
     T_string = 3
     T_dd = 4
-    
-    def __init__(self, name):
-        self._o_type = None
-        self._size = None
-        self._address = None
+    type_default_size = {
+        T_unknown : 1,
+        T_byte : 1,
+        T_integer : 2,
+        T_string : 1,
+        T_dd : 4,
+    }
+
+    def __init__(self, name, o_type, o_size=None):
+        self._o_type = o_type
+        self._size = o_size if o_size is not None else Sp_object.type_default_size[o_type]
         self.name = name
+        self._address = None
         self._value = None
 
-    def set_o_type(self, type_str):
-        if type_str == 'db':
-            self._o_type = Sp_object.T_byte
-            self._size = 1
-        elif type_str == 'dw':
-            self._o_type = Sp_object.T_integer
-            self._size = 2
-        elif type_str == 'ds':
-            self._o_type = Sp_object.T_string
-            self._size = 1
-        elif type_str == 'dd':
-            self._o_type = Sp_object.T_dd
-            self._size = 4
-        elif type_str == 'dhex':
-            # byte with hex value string
-            self._o_type = Sp_object.T_byte
-            self._size = 1
-        else:
-            raise ValueError("Unknown type string %s" % ( type_str,) )
-        
-    def get_o_type(self):
+    @property
+    def o_type(self):
         return self._o_type
-        
-    o_type = property(get_o_type,set_o_type)
 
     # def set_size(self, sz):
     #     if self._o_type == Sp_object.T_integer and sz <> 2:
@@ -61,6 +47,10 @@ class Sp_object(object):
 #    size = property(get_size,set_size)
     size = property(get_size)
 
+    def test_address(self, address):
+        # is this address part of this object
+        return address >= self.address and address < self.address+self.size
+
     def set_address(self, address):
         #if address < 0 or address > 0x2FF:
         #    raise ValueError("Invalid address %s" % ( address, ) )
@@ -69,106 +59,34 @@ class Sp_object(object):
         return self._address
     address = property(get_address,set_address)
 
-    def set_value(self, value):
-        if self._o_type == Sp_object.T_string:
-            # value is the string length
-            self._size = int(value)
-        elif value[0] == '"':
-            # its a a string literal
-            # update size
-            self._value = value[1:-1]
-            self._size = len(self._value)
-        elif value[-1] == 'h':
-            self._value = int(value[:-1], 16)
-        else:
-            self._value = int(value)
-
     def get_value(self):
         return self._value
+    def set_value(self,value):
+        self._value = value
     value = property(get_value,set_value)
 
+    def __str__(self):
+        return str(self._value)
+
+    def __unicode__(self):
+        return unicode(self._value)
+
+    def to_string(self):
+        return "%s\t%s\t%s\t%s\t%s" % ( self.name.ljust(10), hex(self.address), self.o_type, self.size, self.value)
+
 class Sp_objects(dict):
-    def __init__(self):
-        self.parse_all()
-
-    # 2 match groups
-    re_address_line = re.compile("^#define\s*(\w*)\s*0x([0-9A-Fa-f]{1,5})\s*.*$")
-    re_type_line = re.compile("^(\w*)\s*(\w*)\s*(\S*)")
-    
-    def parse_address_line(self, line):
-        # These come from the C header file and are of the format
-        #define udpstring 0x0000 /* String output  */
-        mo = Sp_objects.re_address_line.match(line)
-        if mo:
-            # access groups
-            name = mo.group(1).strip()
-            key = name.lower()
-            if key not in self:
-                print "No such name %s" % (name,)
-                self[key] = Sp_object(name)
-            self[key].address = int(mo.group(2),16)
-
-    def parse_type_line(self, line):
-        # These come from the site player definition file
-        #SPToD	        db	255	; Time of Day Concept, 255 is flag that SP has yet to be loaded.
-        if ';' in line:
-            line = line.split( ';')[0]    # loose any comments
-        line = line.strip()
-        if len(line) > 0 and line[0] != '$':
-            mo = Sp_objects.re_type_line.match(line)
-            if mo:
-                # access groups
-                name = mo.group(1).strip()
-                key = name.lower()
-                if key not in ('org',):
-                    if key in self:
-                        print "Duplicate name %s" % (name,)
-                    else:
-                        self[key] = Sp_object(name)
-                    self[key].o_type = mo.group(2).strip()
-                    self[key].value = mo.group(3).strip()    # initial value, usefull for getting length of strings
-                    
-    def parse_address_file(self, name):
-        with open( name ) as file:
-            for line in file:
-                self.parse_address_line(line)
-                    
-    def parse_type_file(self, name):
-        with open( name ) as file:
-            for line in file:
-                self.parse_type_line(line)
-                
-    def parse_all(self):
-        for name in ("wb_sources/wb55def.inc", "wb_sources/siteplayer.inc", "wb_sources/udpsend_def.inc"):
-            self.parse_type_file(name)
-        for name in ("wb_sources/wb55lib.h",):
-            self.parse_address_file(name)
-
-    def print_values(self, values):
-        print "\tName\tAddress\tType\tSize\tValue"
-        for v in values:
-            print "%s\t%s\t%s\t%s\t%s" % ( v.name.ljust(10), hex(v.address), v.o_type, v.size, v.value)
 
     @property
     def by_address(self):
         return sorted(self.values(), key=lambda k: k.address )
 
+#    def at_address(self, address):
+#        for spo in self.by_address:
+#            if spo.address >= address:
+#                return spo
+
     @property
     def by_name(self):
         return sorted(self.values(), key=lambda k: k.name )
 
-    def print_by_address(self):
-        self.print_values(self.by_address)
-
-    def print_by_name(self):
-        self.print_values(self.values())
-
-    def print_self(self):
-        self.print_values(self.values())
-
-def main():
-    objs = Sp_objects()
-    objs.print_by_address()
-
-#main()
 
