@@ -51,14 +51,14 @@ class SpProtocolHandler(threading.Thread):
         self._running = False
         self._io = io
         self._callback = callback
-        self._raw_data = bytearray(3*256)	# initial state
+        self._raw_data = bytearray(64*1024)	# initial state
         self.start()
 
     def extract_len(self,command):
         return (command & PacketTypes.LENGTH_MASK)+1
 
     def update_data(self,address,data):
-        _log.debug("update_data (%s) %s", address,data)
+        _log.debug("update_data %s: (%s)%s (%s)", address, len(data), data, type(data))
         # update raw_data
         self._raw_data[address:address+len(data)] = data
         # call user to make other updates

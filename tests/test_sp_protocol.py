@@ -20,4 +20,8 @@ class TestSpProtocolHandler(unittest.TestCase):
             while sp.is_running:
                 time.sleep(0.2)
         self.assertNotEqual(0, len(self._updates) )
+        address, length, raw_data = self._updates[-1]
+        print type(raw_data)
+        for b in raw_data:
+            print type(b),b
 

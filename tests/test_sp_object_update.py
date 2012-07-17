@@ -5,17 +5,22 @@ _log = logging.getLogger(__file__)
 import unittest
 
 from sp_parse import Sp_parser
-from sp_objects import Sp_object
 from sp_protocol import SpProtocolHandler
-from sp_object_update import Sp_object_update
+from sp_object_update import sp_object_update
 
-class TestSpObjectUpdate(unittest.TestCase):
+class testSpObjectUpdate(unittest.TestCase):
 
     def setUp(self):
         pass
 
-    def testParse(self):
+    def testUpdate(self):
         values = Sp_parser("../wb_sources")
+
+        with open("data/wb_reset.log", "r") as io:
+            sp = SpProtocolHandler(io, sp_object_update(values))
+            while sp.is_running:
+                time.sleep(0.2)
+
         for spo in values.by_name:
             print spo.to_string()
             self.assertNotEqual("", spo.name )
@@ -29,5 +34,7 @@ class TestSpObjectUpdate(unittest.TestCase):
             if spo.o_type == spo.T_dd:
                 self.assertEqual(4, spo.size)
             self.failUnless(spo.address is not None )
+            if spo.address < (1024*63):
+                self.failUnless(spo.value is not None )
 
 
