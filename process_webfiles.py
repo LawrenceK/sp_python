@@ -15,6 +15,14 @@ def parse_file(source_filename,target_filename):
             nline = re1.sub( rewrite_ref, source.read() )
             target.write(nline)
 
+def parse_spi_file(source_filename,target_filename):
+    # rewrite file stripping everything other than loction header
+    with open(source_filename) as source:
+        with open(target_filename, "w") as target:
+            for line in source.readlines():
+                if "Location" in line:
+                    target.write(line.split(":",1)[1].strip())
+
 def parse_all(sourcedirectory):
     for filename in os.listdir(sourcedirectory):
         source_filename = os.path.join( sourcedirectory,filename)
@@ -23,7 +31,10 @@ def parse_all(sourcedirectory):
         else:
             target_filename = os.path.join( "./www",filename)
         # if non substitute file copy.
-        parse_file(source_filename,target_filename)
+        if filename.endswith(".spi"):
+            parse_spi_file(source_filename,target_filename)
+        else:
+            parse_file(source_filename,target_filename)
 
 def main():
     parse_all("./wb_sources/web55")

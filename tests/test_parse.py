@@ -14,7 +14,7 @@ class TestSpParse(unittest.TestCase):
     def testParse(self):
         values = Sp_parser(os.path.join( os.path.dirname(__file__), "../wb_sources") )
         for spo in values.by_name:
-            print spo.to_string()
+#            print spo.to_string()
             self.assertNotEqual("", spo.name )
             self.failUnless(spo.o_type in [1,2,3,4] )
             if spo.o_type == spo.T_byte:
