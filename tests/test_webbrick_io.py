@@ -1,6 +1,6 @@
 import logging
 import time
-_log = logging.getLogger(__file__)
+_log = logging.getLogger(__name__)
 
 import unittest
 

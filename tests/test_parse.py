@@ -1,11 +1,10 @@
 import logging
-import time
-_log = logging.getLogger(__file__)
+_log = logging.getLogger(__name__)
 
 import unittest
+import os, os.path
 
 from sp_parse import Sp_parser
-from sp_objects import Sp_object
 
 class TestSpParse(unittest.TestCase):
 
@@ -13,7 +12,7 @@ class TestSpParse(unittest.TestCase):
         pass
 
     def testParse(self):
-        values = Sp_parser("../wb_sources")
+        values = Sp_parser(os.path.join( os.path.dirname(__file__), "../wb_sources") )
         for spo in values.by_name:
             print spo.to_string()
             self.assertNotEqual("", spo.name )

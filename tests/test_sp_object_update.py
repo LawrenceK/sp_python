@@ -1,8 +1,9 @@
 import logging
 import time
-_log = logging.getLogger(__file__)
+_log = logging.getLogger(__name__)
 
 import unittest
+import os, os.path
 
 from sp_parse import Sp_parser
 from sp_protocol import SpProtocolHandler
@@ -14,9 +15,9 @@ class testSpObjectUpdate(unittest.TestCase):
         pass
 
     def testUpdate(self):
-        values = Sp_parser("../wb_sources")
+        values = Sp_parser(os.path.join( os.path.dirname(__file__), "../wb_sources") )
 
-        with open("data/wb_reset.log", "r") as io:
+        with open(os.path.join( os.path.dirname(__file__), "data/wb_reset.log") , "r") as io:
             sp = SpProtocolHandler(io, sp_object_update(values))
             while sp.is_running:
                 time.sleep(0.2)

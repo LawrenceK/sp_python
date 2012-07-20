@@ -1,7 +1,8 @@
 import logging
 import time
-_log = logging.getLogger(__file__)
+_log = logging.getLogger(__name__)
 
+import os, os.path
 import unittest
 
 from sp_protocol import SpProtocolHandler
@@ -15,7 +16,7 @@ class TestSpProtocolHandler(unittest.TestCase):
         self._updates.append( (address, length, raw_data) )
 
     def testProtocolCallback(self):
-        with open("data/wb_reset.log", "r") as io:
+        with open(os.path.join( os.path.dirname(__file__), "data/wb_reset.log") , "r") as io:
             sp = SpProtocolHandler(io, self.protocol_callback)
             while sp.is_running:
                 time.sleep(0.2)

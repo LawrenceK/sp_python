@@ -2,7 +2,7 @@
 # Read contents of the web files used by siteplayer builder and substitute replacement strings
 #
 import logging
-_log = logging.getLogger(__file__)
+_log = logging.getLogger(__name__)
 
 from sp_objects import Sp_object
 

@@ -10,7 +10,7 @@
 import re
 import os, os.path
 import logging
-_log = logging.getLogger(__file__)
+_log = logging.getLogger(__name__)
 
 from sp_objects import Sp_object, Sp_objects
 

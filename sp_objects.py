@@ -7,9 +7,8 @@
 # File 1 is a C header file
 # gives us address.
 # File 2 is the siteplayer defintion files - gives us types.
-import re
 import logging
-_log = logging.getLogger(__file__)
+_log = logging.getLogger(__name__)
 
 class Sp_object(object):
     T_unknown = 0
