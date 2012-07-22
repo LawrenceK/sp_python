@@ -151,9 +151,6 @@ class SpProtocolHandler(threading.Thread):
             # desptahc to one of command_XX handlers above
             _log.debug("read_packet %s", command_name)
             getattr(self, command_name)(command)
-        else:
-            # no more data..
-            self._running = False
 
     def shutdown(self):
         self._running = False

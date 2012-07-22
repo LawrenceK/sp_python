@@ -13,7 +13,8 @@ class WebbrickIo(object):
                 baudrate=9600,
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,
-                bytesize=serial.EIGHTBITS
+                bytesize=serial.EIGHTBITS,
+                timeout=1
         )
         self.port.open()
 
@@ -26,6 +27,7 @@ class WebbrickIo(object):
             self.port.write(data)
 
     def read(self, count):
-        return self.port.read(count)
+        chs = self.port.read(count)
+        return chs
 
 

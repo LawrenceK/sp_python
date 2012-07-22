@@ -3,6 +3,7 @@
 #
 import os, os.path
 import SimpleHTTPServer
+import urllib
 import logging
 _log = logging.getLogger(__name__)
 
@@ -10,11 +11,12 @@ from test_io import TestIo
 from sp_parse import Sp_parser
 from sp_protocol import SpProtocolHandler
 from sp_object_update import sp_object_update
+from webbrick_io import WebbrickIo
 
 class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     sp_values = Sp_parser(os.path.join( os.path.dirname(__file__), "./wb_sources") )
-    io = TestIo( os.path.join( os.path.dirname(__file__), "tests/data/wb_reset.log") )
-#    io = open(os.path.join( os.path.dirname(__file__), "tests/data/wb_reset.log") , "r")
+#    io = TestIo( os.path.join( os.path.dirname(__file__), "tests/data/wb_reset.log") )
+    io = WebbrickIo('/dev/ttyUSB0')
     sp = SpProtocolHandler(io, sp_object_update(sp_values))
 
     def translate_file(self, source_filename, target_filename):
@@ -40,11 +42,14 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if ".spi" in self.path:
-            path,params = self.path.split('?',1)
+            path = urllib.unquote(self.path)
+            print path
+            path,params = path.split('?',1)
             for param in params.split('&'):
                 name,value = param.split('=',1)
                 _log.info( "parameter %s : %s", name, value)
                 if name == 'com':
+                    print value
                     RequestHandler.io.write(value) # may need to do unescape.                    
             targetfilename = os.path.join(os.getcwd(), "www", path[1:])
             # read file for redirect headers

@@ -36,6 +36,7 @@ def sp_object_update(values):
                     spo.value = spo.value*256 + bytes[i]
             else:
                 raise Exception("Unhandled type")
+            print "Update %s with %s" % (spo.name, spo.value)
 
         address = start_address
         while address < start_address + update_len:

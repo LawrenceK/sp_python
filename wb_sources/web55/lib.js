@@ -513,8 +513,8 @@ function Preamble(st)
     {
         mi("Configure Server","","cfg.htm?page=srv");
         mi("Manual commands","","cfg.htm?page=man");
-        mi("Xml Status", "", "WbStatus.xml");
-        mi("Xml Configuration","","WbCfg.xml");
+        mi("Xml Status", "", "wbstatus.xml");
+        mi("Xml Configuration","","wbcfg.xml");
     }
     tbe();
     if (st != "")

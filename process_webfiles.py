@@ -13,6 +13,9 @@ def parse_file(source_filename,target_filename):
     with open(source_filename) as source:
         with open(target_filename, "w") as target:
             nline = re1.sub( rewrite_ref, source.read() )
+            nline = nline.replace("Values.inc","values.inc")
+            nline = nline.replace("Cfg.inc","cfg.inc")
+            nline = nline.replace("Sch.inc","sch.inc")
             target.write(nline)
 
 def parse_spi_file(source_filename,target_filename):
@@ -26,10 +29,10 @@ def parse_spi_file(source_filename,target_filename):
 def parse_all(sourcedirectory):
     for filename in os.listdir(sourcedirectory):
         source_filename = os.path.join( sourcedirectory,filename)
-        if filename.endswith(".inc"):
-            target_filename = os.path.join( "./inc",filename)
+        if filename.endswith(".inc") or filename.endswith(".xml") :
+            target_filename = os.path.join( "./inc",filename).lower()
         else:
-            target_filename = os.path.join( "./www",filename)
+            target_filename = os.path.join( "./www",filename).lower()
         # if non substitute file copy.
         if filename.endswith(".spi"):
             parse_spi_file(source_filename,target_filename)
