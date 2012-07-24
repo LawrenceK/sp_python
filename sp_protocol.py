@@ -120,12 +120,12 @@ class SpProtocolHandler(threading.Thread):
     def command_C0(self,command):
         # Read
         address = self.read_short_address()
-#        self._io.write( self._raw_data[address:address+self.extract_len(command)])
+        self._io.write( self._raw_data[address:address+self.extract_len(command)])
 
     def command_D0(self,command):
         # ReadX
         address = self.read_long_address()
-#        self._io.write( self._raw_data[address:address+self.extract_len(command)])
+        self._io.write( self._raw_data[address:address+self.extract_len(command)])
 
     def command_E0(self,command):
         # readbit
