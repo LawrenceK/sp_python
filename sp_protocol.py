@@ -10,6 +10,7 @@
 import threading
 import logging
 _log = logging.getLogger(__file__)
+import socket
 
 class PacketTypes:
     # extract packet type from byte
@@ -86,8 +87,18 @@ class SpProtocolHandler(threading.Thread):
         pass
 
     def command_50(self,command):
+        to_address = '255.255.255.255'
+        to_port = 2552
+        b_loc = 0   # first thing
+        b_len = 32
         #UDPSend
-        pass
+        # locate the target address
+        # locate target port
+        # locate buffer location in self._raw_data
+        # open socket
+        # send UDP packet
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0) as s:
+            s.sendto(self._raw_data[b_loc:b_loc+b_len].decode(), (to_address, to_port))
 
     def command_60(self,command):
         # unused
