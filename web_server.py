@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #
 # Read contents of the web files used by siteplayer builder and substitute replacement strings
 #
@@ -13,10 +14,13 @@ from sp_protocol import SpProtocolHandler
 from sp_object_update import sp_object_update
 from webbrick_io import WebbrickIo
 
+TTY_PORT = "/dev/ttyAMA0"
+#TTY_PORT = "/dev/ttyUSB0"
+
 class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     sp_values = Sp_parser(os.path.join( os.path.dirname(__file__), "./wb_sources") )
 #    io = TestIo( os.path.join( os.path.dirname(__file__), "tests/data/wb_reset.log") )
-    io = WebbrickIo('/dev/ttyUSB0')
+    io = WebbrickIo(TTY_PORT)
     sp = SpProtocolHandler(io, sp_object_update(sp_values))
 
     def translate_file(self, source_filename, target_filename):

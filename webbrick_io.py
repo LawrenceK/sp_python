@@ -8,6 +8,7 @@ class WebbrickIo(object):
         self.open(portname)
 
     def open(self, portname):
+        print "Open", portname
         self.port = serial.Serial(
                 port=portname,
                 baudrate=9600,
@@ -16,7 +17,8 @@ class WebbrickIo(object):
                 bytesize=serial.EIGHTBITS,
                 timeout=1
         )
-        self.port.open()
+	print "IsOpen", self.port
+#        self.port.open()
 
     def close(self):
         if self.port.isOpen():
