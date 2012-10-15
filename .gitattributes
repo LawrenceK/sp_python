@@ -1,0 +1,10 @@
+* text=auto
+*.py text=text
+*.c text=text
+*.h text=text
+
+*sln text eol=crlf
+
+*.png binary
+*.jpg binary
+*.gif binary
